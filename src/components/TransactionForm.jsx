@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import theme from "../theme";
 
 const TransactionForm = ({ onDonate }) => {
   const [amount, setAmount] = useState("");
@@ -75,14 +76,14 @@ const styles = {
     padding: "8px 12px",
     fontSize: "1rem",
     borderRadius: "4px",
-    border: "1px solid #ccc",
+    border: `1px solid ${theme.palette.secondary.main}`,
   },
   button: {
     padding: "10px 16px",
     fontSize: "1rem",
-    backgroundColor: "#4caf50",
+    backgroundColor: theme.palette.primary.main,
     color: "white",
-    border: "none",
+    border: `1px solid ${theme.palette.secondary.main}`,
     borderRadius: "6px",
     cursor: "pointer",
     fontWeight: "600",

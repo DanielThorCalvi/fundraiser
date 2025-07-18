@@ -10,19 +10,19 @@ import { format } from 'date-fns';
 export default function TransactionList({ transactions }) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="transactions table">
+      <Table size="small" sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
-            <TableCell align='right'>Upphæð (kr.)</TableCell>
-            <TableCell>Lýsing</TableCell>
+            <TableCell align='right' sx={{ borderRight:'1px solid #ccc' }}>Upphæð (kr.)</TableCell>
+            <TableCell sx={{ borderRight:'1px solid #ccc' }}>Lýsing</TableCell>
             <TableCell>Dags.</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {transactions.map((row, idx) => (
             <TableRow key={row.id || idx}>
-              <TableCell align='right'>{row.amount.toLocaleString('de-DE')}</TableCell>
-              <TableCell>{row.description}</TableCell>
+              <TableCell align='right'sx={{ borderRight:'1px solid #ccc' }}>{row.amount.toLocaleString('de-DE')}</TableCell>
+              <TableCell sx={{ borderRight:'1px solid #ccc' }}>{row.description}</TableCell>
               <TableCell>{format(row.created_at, 'MM/dd/yyyy')}</TableCell>
             </TableRow>
           ))}

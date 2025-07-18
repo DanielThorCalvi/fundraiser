@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import theme from "../theme";
 const FundraiserProgress = ({ goalAmount, currentAmount }) => {
   const [displayedAmount, setDisplayedAmount] = useState(0);
   const prevAmountRef = useRef(currentAmount);
@@ -60,7 +61,7 @@ const styles = {
     position: "relative",
     height: "250px",
     width: "40px",
-    border: "3px solid #4caf50",
+    border: `3px solid ${theme.palette.secondary.main}`,
     borderRadius: "20px",
     backgroundColor: "#e0e0e0",
     overflow: "hidden",
@@ -70,7 +71,7 @@ const styles = {
     position: "absolute",
     bottom: 0,
     width: "100%",
-    backgroundColor: "#4caf50",
+    backgroundColor: theme.palette.primary.main,
     transition: "height 0.3s ease-out",
     borderRadius: "0 0 20px 20px",
   },
