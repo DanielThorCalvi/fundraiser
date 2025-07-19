@@ -38,7 +38,7 @@ export default function GoalList({ goals, setGoals }) {
   return (
     <>
       <TableContainer component={Paper}>
-        <Box display="flex" justifyContent="right" sx={{ borderBottom:'1px solid #ccc' }}>
+        <Box display="flex" justifyContent="right" sx={{ minWidth: 650, borderBottom:'1px solid #ccc' }}>
           <IconButton color="primary" aria-label="add to shopping cart"  onClick={() => setOpen(true)}>
             <AddIcon />
           </IconButton>
