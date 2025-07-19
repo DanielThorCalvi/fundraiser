@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient'
 import FundraiserProgress from './components/FundraiserProgress'
 import TransactionForm from './components/TransactionForm';
 import TransactionList from './components/TransactionList';
@@ -12,39 +11,35 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import ListIcon from '@mui/icons-material/List';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { addTransaction, fetchTransactions } from './services/transactionService';
+import { addGoal, fetchGoals } from './services/goalService';
+import GoalList from './components/GoalList';
 
 function App() {
   const [currentAmount, setCurrentAmount] = useState(0);
   const [transactions, setTransactions] = useState([]);
+  const [goals, setGoals] = useState([]);
   const [tab, setTab] = useState(0);
   const goalAmount = 10000000; // 1 million kr
 
   useEffect(() => {
-    async function fetchTotal() {
-      const { data, error } = await supabase
-        .from('transactions')
-        .select('amount, description, created_at')
-        .order('created_at', { ascending: false });
+    async function startup() {
+      const transactionsData = await fetchTransactions();
+      const goalsData = await fetchGoals(); // Assuming you have a similar function for goals
 
-      if (error) {
-        console.error('Error fetching transactions:', error)
-        return
-      }
+      setGoals(goalsData || []);
+      setTransactions(transactionsData);
 
-      const totalAmount = data.reduce((acc, tx) => acc + parseFloat(tx.amount), 0)
-      setTransactions(data);
+      const totalAmount = transactionsData.reduce((acc, tx) => acc + parseFloat(tx.amount), 0)
       setCurrentAmount(totalAmount)    
     }
 
-    fetchTotal()
+    startup()
   }, [])
 
   const handleDonate = async (transaction) => {
-    const { data, error } = await supabase
-    .from('transactions')
-    .insert([
-      transaction
-    ])
+    addTransaction(transaction);
     setTransactions(prev => [{ ...transaction, created_at: new Date() },...prev]);
     setCurrentAmount(prev => prev + transaction.amount);
   }
@@ -80,6 +75,7 @@ function App() {
             <Tabs value={tab} onChange={handleTabChange} centered>
               <Tab icon={<ThermostatIcon />} />
               <Tab icon={<ListIcon />} />
+              <Tab icon={<EmojiEventsIcon />} />
             </Tabs>
           </Box>
           <TabPanel value={tab} index={0}>
@@ -89,7 +85,14 @@ function App() {
           <TabPanel value={tab} index={1}>
             <Box sx={{ width: '100%', justifyItems: 'center' }}>
               <Box sx={{ width: '70vw' }}>
-                <TransactionList  transactions={transactions} />
+                <TransactionList  transactions={transactions} setTransactions={setTransactions} setCurrentAmount={setCurrentAmount}/>
+              </Box>
+            </Box>
+          </TabPanel>
+          <TabPanel value={tab} index={2}>
+            <Box sx={{ width: '100%', justifyItems: 'center' }}>
+              <Box sx={{ width: '70vw' }}>
+                <GoalList  goals={goals} setGoals={setGoals}/>
               </Box>
             </Box>
           </TabPanel>
